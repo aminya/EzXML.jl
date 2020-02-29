@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using EzXML
+using EzXMLp
 
 doc = readhtml(ARGS[1])
 # Select <a/> links that contain a non-blank text node.
