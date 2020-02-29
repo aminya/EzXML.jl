@@ -28,7 +28,7 @@ end
 end
 
 function Base.show(io::IO, reader::StreamReader)
-    prefix = "EzXML.StreamReader"
+    prefix = "EzXMLPatched.StreamReader"
     nodetype_reader = repr(nodetype(reader))
     print(io, "$(prefix)(<$(nodetype_reader)>)")
 end

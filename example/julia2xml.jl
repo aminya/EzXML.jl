@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using EzXML
+using EzXMLPatched
 
 # Convert a Julia expression to an XML document.
 function expr2xml(expr)
