@@ -2,17 +2,17 @@ Reference
 =========
 
 ```@meta
-CurrentModule = EzXML
+CurrentModule = EzXMLp
 ```
 
 Types
 -----
 
 ```@docs
-EzXML.Document
-EzXML.Node
-EzXML.StreamReader
-EzXML.XMLError
+EzXMLp.Document
+EzXMLp.Node
+EzXMLp.StreamReader
+EzXMLp.XMLError
 ```
 
 I/O
@@ -47,27 +47,27 @@ Node types
 
 | Node type                  | Integer |
 | -------------------------- | ------- |
-| `EzXML.ELEMENT_NODE`       | 1       |
-| `EzXML.ATTRIBUTE_NODE`     | 2       |
-| `EzXML.TEXT_NODE`          | 3       |
-| `EzXML.CDATA_SECTION_NODE` | 4       |
-| `EzXML.ENTITY_REF_NODE`    | 5       |
-| `EzXML.ENTITY_NODE`        | 6       |
-| `EzXML.PI_NODE`            | 7       |
-| `EzXML.COMMENT_NODE`       | 8       |
-| `EzXML.DOCUMENT_NODE`      | 9       |
-| `EzXML.DOCUMENT_TYPE_NODE` | 10      |
-| `EzXML.DOCUMENT_FRAG_NODE` | 11      |
-| `EzXML.NOTATION_NODE`      | 12      |
-| `EzXML.HTML_DOCUMENT_NODE` | 13      |
-| `EzXML.DTD_NODE`           | 14      |
-| `EzXML.ELEMENT_DECL`       | 15      |
-| `EzXML.ATTRIBUTE_DECL`     | 16      |
-| `EzXML.ENTITY_DECL`        | 17      |
-| `EzXML.NAMESPACE_DECL`     | 18      |
-| `EzXML.XINCLUDE_START`     | 19      |
-| `EzXML.XINCLUDE_END`       | 20      |
-| `EzXML.DOCB_DOCUMENT_NODE` | 21      |
+| `EzXMLp.ELEMENT_NODE`       | 1       |
+| `EzXMLp.ATTRIBUTE_NODE`     | 2       |
+| `EzXMLp.TEXT_NODE`          | 3       |
+| `EzXMLp.CDATA_SECTION_NODE` | 4       |
+| `EzXMLp.ENTITY_REF_NODE`    | 5       |
+| `EzXMLp.ENTITY_NODE`        | 6       |
+| `EzXMLp.PI_NODE`            | 7       |
+| `EzXMLp.COMMENT_NODE`       | 8       |
+| `EzXMLp.DOCUMENT_NODE`      | 9       |
+| `EzXMLp.DOCUMENT_TYPE_NODE` | 10      |
+| `EzXMLp.DOCUMENT_FRAG_NODE` | 11      |
+| `EzXMLp.NOTATION_NODE`      | 12      |
+| `EzXMLp.HTML_DOCUMENT_NODE` | 13      |
+| `EzXMLp.DTD_NODE`           | 14      |
+| `EzXMLp.ELEMENT_DECL`       | 15      |
+| `EzXMLp.ATTRIBUTE_DECL`     | 16      |
+| `EzXMLp.ENTITY_DECL`        | 17      |
+| `EzXMLp.NAMESPACE_DECL`     | 18      |
+| `EzXMLp.XINCLUDE_START`     | 19      |
+| `EzXMLp.XINCLUDE_END`       | 20      |
+| `EzXMLp.DOCB_DOCUMENT_NODE` | 21      |
 
 Node accessors
 --------------
@@ -186,24 +186,24 @@ Reader node types
 
 | Node type                             | Integer |
 | ------------------------------------- | ------- |
-| `EzXML.READER_NONE`                   | 0       |
-| `EzXML.READER_ELEMENT`                | 1       |
-| `EzXML.READER_ATTRIBUTE`              | 2       |
-| `EzXML.READER_TEXT`                   | 3       |
-| `EzXML.READER_CDATA`                  | 4       |
-| `EzXML.READER_ENTITY_REFERENCE`       | 5       |
-| `EzXML.READER_ENTITY`                 | 6       |
-| `EzXML.READER_PROCESSING_INSTRUCTION` | 7       |
-| `EzXML.READER_COMMENT`                | 8       |
-| `EzXML.READER_DOCUMENT`               | 9       |
-| `EzXML.READER_DOCUMENT_TYPE`          | 10      |
-| `EzXML.READER_DOCUMENT_FRAGMENT`      | 11      |
-| `EzXML.READER_NOTATION`               | 12      |
-| `EzXML.READER_WHITESPACE`             | 13      |
-| `EzXML.READER_SIGNIFICANT_WHITESPACE` | 14      |
-| `EzXML.READER_END_ELEMENT`            | 15      |
-| `EzXML.READER_END_ENTITY`             | 16      |
-| `EzXML.READER_XML_DECLARATION`        | 17      |
+| `EzXMLp.READER_NONE`                   | 0       |
+| `EzXMLp.READER_ELEMENT`                | 1       |
+| `EzXMLp.READER_ATTRIBUTE`              | 2       |
+| `EzXMLp.READER_TEXT`                   | 3       |
+| `EzXMLp.READER_CDATA`                  | 4       |
+| `EzXMLp.READER_ENTITY_REFERENCE`       | 5       |
+| `EzXMLp.READER_ENTITY`                 | 6       |
+| `EzXMLp.READER_PROCESSING_INSTRUCTION` | 7       |
+| `EzXMLp.READER_COMMENT`                | 8       |
+| `EzXMLp.READER_DOCUMENT`               | 9       |
+| `EzXMLp.READER_DOCUMENT_TYPE`          | 10      |
+| `EzXMLp.READER_DOCUMENT_FRAGMENT`      | 11      |
+| `EzXMLp.READER_NOTATION`               | 12      |
+| `EzXMLp.READER_WHITESPACE`             | 13      |
+| `EzXMLp.READER_SIGNIFICANT_WHITESPACE` | 14      |
+| `EzXMLp.READER_END_ELEMENT`            | 15      |
+| `EzXMLp.READER_END_ENTITY`             | 16      |
+| `EzXMLp.READER_XML_DECLARATION`        | 17      |
 
 Streaming reader
 ----------------

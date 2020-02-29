@@ -7,7 +7,7 @@ allocated by libxml2. There are several node-like types in libxml2 that have
 common fields to constitute an XML tree. These fields are always located at the
 first fields of struct definitions, so we can safely use them by casting a
 pointer to `_Node`. Especially, the first field, `_private`, is reserved for
-applications and EzXML.jl uses it to store a pointer to a `Node` object. That
+applications and EzXMLp.jl uses it to store a pointer to a `Node` object. That
 is, a `Node` object points to a node struct and the node struct keeps an
 opposite pointer to the `Node` object. These bidirectional references are
 especially important in this package.
@@ -33,7 +33,7 @@ after finished freeing nodes, which may result in a segmentation fault. Another
 important role of keeping owner reference is that it prohibits owner objects
 from being deallocated by Julia's garbage collecter.
 
-Since the `owner` field is not managed by libxml2, EzXML.jl needs to update the
+Since the `owner` field is not managed by libxml2, EzXMLp.jl needs to update the
 field when changing the structure of an XML tree. For example, linking a tree
 with another tree will lead to an inconsistent situation where descendants nodes
 reference different owner nodes. `update_owners!` updates the owner node of a

@@ -1,5 +1,5 @@
-name = "EzXML"
-uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+name = "EzXMLp"
+uuid = "ebbc4602-91c8-4f2e-9b89-acc792d9cec0"
 authors = ["Kenta Sato <bicycle1885@gmail.com>"]
 version = "1.1.0"
 

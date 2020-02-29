@@ -1,11 +1,11 @@
 using Documenter
-using EzXML
+using EzXMLp
 
 makedocs(
-    sitename="EzXML.jl",
-    modules=[EzXML],
+    sitename="EzXMLp.jl",
+    modules=[EzXMLp],
     pages=["index.md", "manual.md", "reference.md", "devnotes.md"])
 
 deploydocs(
-    repo="github.com/bicycle1885/EzXML.jl.git",
+    repo="github.com/bicycle1885/EzXMLp.jl.git",
     target="build")

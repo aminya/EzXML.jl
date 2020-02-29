@@ -1,7 +1,7 @@
 Home
 ====
 
-EzXML.jl is a package for handling XML and HTML documents. The APIs are simple
+EzXMLp.jl is a package for handling XML and HTML documents. The APIs are simple
 and consistent, and provide a range of functionalities including:
 * Reading and writing XML/HTML documents.
 * Traversing XML/HTML trees with DOM interfaces.
@@ -15,7 +15,7 @@ and consistent, and provide a range of functionalities including:
 Here is an example of parsing and traversing an XML document:
 ```julia
 # Load the package.
-using EzXML
+using EzXMLp
 
 # Parse an XML string
 # (use `readxml(<filename>)` to read a document from a file).

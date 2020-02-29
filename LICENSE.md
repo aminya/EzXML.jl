@@ -1,4 +1,4 @@
-The EzXML.jl package is licensed under the MIT "Expat" License:
+The EzXMLp.jl package is licensed under the MIT "Expat" License:
 
 > Copyright (c) 2016: Kenta Sato.
 > 

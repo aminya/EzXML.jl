@@ -242,7 +242,7 @@ Properties
 
 | Name | Type | Description |
 |:---- |:---- |:------------|
-| `type` | `EzXML.NodeType` | the type of a node |
+| `type` | `EzXMLp.NodeType` | the type of a node |
 | `name` | `String?`| the name of a node|
 | `path` | `String`| the absolute path to a node |
 | `content` | `String`| the content of a node |

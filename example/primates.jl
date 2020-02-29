@@ -1,6 +1,6 @@
 #!/usr/bin/env julia
 
-using EzXML
+using EzXMLp
 
 # Parse an XML string
 # (use `readxml(<filename>)` to read a document from a file).
