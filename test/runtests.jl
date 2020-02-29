@@ -1305,7 +1305,6 @@ end
         @test occursin(r"^Node\(<ELEMENT_NODE\[root\]>\)$", repr(root(doc)))
         @test occursin(r"^Node\(<ATTRIBUTE_NODE\[attr\]>\)$", repr(attributes(root(doc))[1]))
         @test occursin(r"^EzXMLp.Document\(Node\(<DOCUMENT_NODE>\)\)$", repr(doc))
-
         sample2 = joinpath(dirname(@__FILE__), "sample2.xml")
         reader = open(EzXMLp.StreamReader, sample2)
         @test occursin(r"^EzXMLp.StreamReader\(<[A-Z_]+@0x[a-f0-9]+>\)$", repr(reader))
