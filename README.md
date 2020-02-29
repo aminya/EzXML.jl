@@ -5,8 +5,7 @@ EzXMLPatched.jl - XML/HTML tools for primates
 
 [![Docs Stable][docs-stable-img]][docs-stable-url]
 [![Docs Latest][docs-latest-img]][docs-latest-url]
-[![TravisCI Status][travisci-img]][travisci-url]
-[![Appveyor Status][appveyor-img]][appveyor-url]
+![Build Status (Github Actions)](https://github.com/aminya/EzXMLPatched.jl/workflows/CI/badge.svg)
 [![codecov.io][codecov-img]][codecov-url]
 
 EzXMLPatched.jl is a package to handle XML/HTML documents for primates.
