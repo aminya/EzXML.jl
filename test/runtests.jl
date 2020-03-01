@@ -1301,14 +1301,14 @@ end
 @testset "Misc" begin
     @testset "show" begin
         doc = parsexml("""<root attr="val"/>""")
-        @test occursin(r"^EzXMLPatched.Node\(<DOCUMENT_NODE>\)$", repr(doc.node))
-        @test occursin(r"^EzXMLPatched.Node\(<ELEMENT_NODE\[root\]>\)$", repr(root(doc)))
-        @test occursin(r"^EzXMLPatched.Node\(<ATTRIBUTE_NODE\[attr\]>\)$", repr(attributes(root(doc))[1]))
-        @test occursin(r"^EzXMLPatched.Document\(EzXMLPatched.Node\(<DOCUMENT_NODE>\)\)$", repr(doc))
+        @test occursin(r"^Node\(<DOCUMENT_NODE>\)$", repr(doc.node))
+        @test occursin(r"^Node\(<ELEMENT_NODE\[root\]>\)$", repr(root(doc)))
+        @test occursin(r"^Node\(<ATTRIBUTE_NODE\[attr\]>\)$", repr(attributes(root(doc))[1]))
+        @test occursin(r"^EzXML.Document\(Node\(<DOCUMENT_NODE>\)\)$", repr(doc))
 
         sample2 = joinpath(dirname(@__FILE__), "sample2.xml")
-        reader = open(EzXMLPatched.StreamReader, sample2)
-        @test occursin(r"^EzXMLPatched.StreamReader\(<[A-Z_]+>\)$", repr(reader))
+        reader = open(EzXML.StreamReader, sample2)
+        @test occursin(r"^StreamReader\(<[A-Z_]+>\)$", repr(reader))
         close(reader)
     end
 
