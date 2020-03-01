@@ -1,21 +1,21 @@
 Manual
 ======
 
-This page is dedicated to those who are new to EzXML.jl. It is recommended to
+This page is dedicated to those who are new to EzXMLPatched.jl. It is recommended to
 read this page before reading other pages to grasp the concepts of the package
 first. Once you have read it, [the reference page](reference.md) would be a
 better place to find necessary functions. [The developer notes
 page](devnotes.md) is for developers and most users do not need to read it.
 
-In this manual, we use `using EzXML` to load the package for brevity.  However,
-it is recommended to use `import EzXML` or something similar for non-trivial
-scripts or packages because EzXML.jl exports a number of names to your
+In this manual, we use `using EzXMLPatched` to load the package for brevity.  However,
+it is recommended to use `import EzXMLPatched` or something similar for non-trivial
+scripts or packages because EzXMLPatched.jl exports a number of names to your
 environment. These are useful in an interactive session but easily conflict
 with other names. If you would like to know the list of exported names, please
-go to the top of src/EzXML.jl, where you will see a long list of type and
+go to the top of src/EzXMLPatched.jl, where you will see a long list of type and
 function names.
 
-EzXML.jl is built on top of [libxml2](http://xmlsoft.org/), a portable C library
+EzXMLPatched.jl is built on top of [libxml2](http://xmlsoft.org/), a portable C library
 compliant to the XML standard. If you are no familiar with XML itself, the
 following links offer good resources to learn the basic concents of XML:
 - [XML Tutorial](https://www.w3schools.com/xml/default.asp)
@@ -25,8 +25,8 @@ following links offer good resources to learn the basic concents of XML:
 ```@meta
 # Ignore pointers.
 DocTestFilters = r"@0x[0-9a-f]{16}"
-# Load EzXML.jl
-DocTestSetup = :(using EzXML)
+# Load EzXMLPatched.jl
+DocTestSetup = :(using EzXMLPatched)
 ```
 
 Data types
@@ -38,27 +38,27 @@ document. A `Document` object points to the topmost node of the XML document,
 but note that it is different from the root node you see in an XML file.  The
 `Node` type represents almost everything in an XML document; elements,
 attributes, texts, CDATAs, comments, documents, etc. are all `Node` type
-objects. These two type names are not exported from EzXML.jl because their names
+objects. These two type names are not exported from EzXMLPatched.jl because their names
 are very general and easily conflict with other names exported from other
 packages.  However, the user can expect them as public APIs and use them with
-the `EzXML.` prefix.
+the `EzXMLPatched.` prefix.
 
 Here is an example to create an empty XML document using the `XMLDocument`
 constructor:
 ```jldoctest doc
-julia> using EzXML
+julia> using EzXMLPatched
 
 julia> doc = XMLDocument()
 EzXML.Document(Node(<DOCUMENT_NODE>))
 
 julia> typeof(doc)
-EzXML.Document
+EzXMLPatched.Document
 
 julia> doc.node
 Node(<DOCUMENT_NODE>)
 
 julia> typeof(doc.node)
-EzXML.Node
+EzXMLPatched.Node
 
 julia> print(doc)  # print an XML-formatted text
 <?xml version="1.0" encoding="UTF-8"?>
@@ -278,7 +278,7 @@ julia> println(genus[1])  # the "genus" element has been updated
 In this package, a `Node` object is regarded as a container of its child nodes.
 This idea is reflected on its property and function names; for example, a
 property returning the first child node is named as `.firstnode` instead of
-`.firstchildnode`. All properties and functions provided by the `EzXML` module
+`.firstchildnode`. All properties and functions provided by the `EzXMLPatched` module
 are named in this way, and the tree traversal API of a node works on its child
 nodes by default. Properties (functions) with a direction prefix work on that
 direction; for example, `.nextnode` returns the next sibling node and
@@ -448,7 +448,7 @@ julia> doc = parsexml("""
 EzXML.Document(Node(<DOCUMENT_NODE>))
 
 julia> findall("/parent/child", doc.root)  # nothing will be found
-0-element Array{EzXML.Node,1}
+0-element Array{EzXMLPatched.Node,1}
 
 julia> namespaces(doc.root)  # the default namespace has an empty prefix
 1-element Array{Pair{String,String},1}:
@@ -466,7 +466,7 @@ julia> findall("/x:parent/x:child", doc.root, ["x"=>ns])  # specify its prefix a
 Streaming API
 -------------
 
-In addition to the DOM API, EzXML.jl provides a streaming reader of XML files.
+In addition to the DOM API, EzXMLPatched.jl provides a streaming reader of XML files.
 The streaming reader processes, as the name suggests, a stream of XML data by
 incrementally reading data from a file instead of reading a whole XML tree into
 the memory. This enables processing extremely large files with limited memory.
@@ -491,7 +491,7 @@ undirected graph in the [GraphML](http://graphml.graphdrawing.org/) format
     </graphml>
 
 The API of a streaming reader is quite different from the DOM API.  The first
-thing you needs to do is to create an `EzXML.StreamReader` object using the
+thing you needs to do is to create an `EzXMLPatched.StreamReader` object using the
 `open` function:
 ```jldoctest stream
 julia> reader = open(EzXML.StreamReader, "undirected.graphml")
@@ -588,13 +588,13 @@ julia> close(reader)  # close the reader
 
 The `open(...) do ... end` pattern can be written as:
 ```jldoctest
-julia> open(EzXML.StreamReader, "undirected.graphml") do reader
+julia> open(EzXMLPatched.StreamReader, "undirected.graphml") do reader
            # do something
        end
 
 ```
 
-EzXML.jl overloads the `Base.iterate` function to make a streaming reader
+EzXMLPatched.jl overloads the `Base.iterate` function to make a streaming reader
 iterable via the `for` loop. Therefore, you can iterate over all components
 without explicitly calling `iterate` as follows:
 ```jldoctest

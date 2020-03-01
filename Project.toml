@@ -1,7 +1,7 @@
-name = "EzXML"
-uuid = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+name = "EzXMLPatched"
+uuid = "ebbc4602-91c8-4f2e-9b89-acc792d9cec0"
 authors = ["Kenta Sato <bicycle1885@gmail.com>"]
-version = "1.1.0"
+version = "1.0.0"
 
 [deps]
 XML2_jll = "02c8fc9c-b97f-50b9-bbe4-9be30ff0a78a"

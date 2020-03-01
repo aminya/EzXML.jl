@@ -1,4 +1,4 @@
-using EzXML
+using EzXMLPatched
 using Test
 using Logging: SimpleLogger, with_logger
 
@@ -16,17 +16,17 @@ end
 
 @testset "Error" begin
     for i in 1:21
-        t = convert(EzXML.NodeType, i)
+        t = convert(EzXMLPatched.NodeType, i)
         @test t == i
         @test occursin(r"^[A-Z_]+_(NODE|DECL|START|END)$", repr(t))
         @test string(t) == string(i)
-        @test convert(EzXML.NodeType, t) === t
+        @test convert(EzXMLPatched.NodeType, t) === t
     end
-    @test_throws AssertionError repr(convert(EzXML.NodeType, 0))
-    @test_throws AssertionError repr(convert(EzXML.NodeType, 100))
+    @test_throws AssertionError repr(convert(EzXMLPatched.NodeType, 0))
+    @test_throws AssertionError repr(convert(EzXMLPatched.NodeType, 100))
 
-    err = EzXML.XMLError(1, 77, "some parser error", EzXML.XML_ERR_ERROR, 123)
-    @test isa(err, EzXML.XMLError)
+    err = EzXMLPatched.XMLError(1, 77, "some parser error", EzXMLPatched.XML_ERR_ERROR, 123)
+    @test isa(err, EzXMLPatched.XMLError)
     buf = IOBuffer()
     showerror(buf, err)
     @test take!(buf) == b"XMLError: some parser error from XML parser (code: 77, line: 123)"
@@ -37,22 +37,22 @@ end
         valid_file = joinpath(dirname(@__FILE__), "sample1.xml")
         invalid_file = joinpath(dirname(@__FILE__), "sample1.invalid.xml")
         doc = readxml(valid_file)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
-        @test nodetype(readxml(valid_file).node) === EzXML.DOCUMENT_NODE
-        @test_throws EzXML.XMLError readxml(invalid_file)
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
+        @test nodetype(readxml(valid_file).node) === EzXMLPatched.DOCUMENT_NODE
+        @test_throws EzXMLPatched.XMLError readxml(invalid_file)
         @assert !isfile("not-exist.xml")
-        @test_throws EzXML.XMLError readxml("not-exist.xml")
+        @test_throws EzXMLPatched.XMLError readxml("not-exist.xml")
 
         # from compressed file
         compressed = joinpath(dirname(@__FILE__), "sample1.xml.gz")
-        @test isa(readxml(compressed), EzXML.Document)
+        @test isa(readxml(compressed), EzXMLPatched.Document)
 
         # from stream
         doc = open(readxml, valid_file)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
-        @test_throws EzXML.XMLError open(readxml, invalid_file)
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
+        @test_throws EzXMLPatched.XMLError open(readxml, invalid_file)
 
         # properties
         doc = readxml(joinpath(dirname(@__FILE__), "sample1.xml"))
@@ -70,22 +70,22 @@ end
     @testset "HTML" begin
         valid_file = joinpath(dirname(@__FILE__), "sample1.html")
         doc = readhtml(valid_file)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
-        @test nodetype(readhtml(valid_file).node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
+        @test nodetype(readhtml(valid_file).node) === EzXMLPatched.HTML_DOCUMENT_NODE
         @assert !isfile("not-exist.html")
-        @test_throws EzXML.XMLError readxml("not-exist.html")
-        @test_throws EzXML.XMLError readhtml("not-exist.html")
+        @test_throws EzXMLPatched.XMLError readxml("not-exist.html")
+        @test_throws EzXMLPatched.XMLError readhtml("not-exist.html")
 
         # from compressed file
         compressed = joinpath(dirname(@__FILE__), "sample1.html.gz")
-        @test isa(readxml(compressed), EzXML.Document)
-        @test isa(readhtml(compressed), EzXML.Document)
+        @test isa(readxml(compressed), EzXMLPatched.Document)
+        @test isa(readhtml(compressed), EzXMLPatched.Document)
 
         # from stream (FIXME: this causes "Misplaced DOCTYPE declaration")
         #doc = open(readhtml, valid_file)
-        #@test isa(doc, EzXML.Document)
-        #@test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        #@test isa(doc, EzXMLPatched.Document)
+        #@test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
         buf = IOBuffer("""
         <html>
             <head><title>hey</title></head>
@@ -93,8 +93,8 @@ end
         </html>
         """)
         doc = readhtml(buf)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
 
         buf = IOBuffer("""
         <a href="http://mbgd.genome.ad.jp">MBGD</a>
@@ -106,8 +106,8 @@ end
         doc, messages = capture_logging_messages() do
             readhtml(buf)
         end
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
         @test occursin("Warning: XMLError: htmlParseCharRef: missing semicolon from HTML parser (code: 7, line: 2)", messages)
         @test occursin("Warning: XMLError: htmlParseCharRef: missing semicolon from HTML parser (code: 7, line: 4)", messages)
     end
@@ -139,16 +139,16 @@ end
             <child attr="value">content</child>
         </root>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
 
         doc = parsexml("""
         <root>
             <child attr="value">content</child>
         </root>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
 
         doc = parsexml(b"""
         <?xml version="1.0"?>
@@ -156,12 +156,12 @@ end
             <child attr="value">content</child>
         </root>
         """)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
 
-        @test nodetype(parsexml("<xml/>").node) === EzXML.DOCUMENT_NODE
-        @test nodetype(parsexml("<html/>").node) === EzXML.DOCUMENT_NODE
-        @test nodetype(parsexml(b"<xml/>").node) === EzXML.DOCUMENT_NODE
-        @test nodetype(parsexml(b"<html/>").node) === EzXML.DOCUMENT_NODE
+        @test nodetype(parsexml("<xml/>").node) === EzXMLPatched.DOCUMENT_NODE
+        @test nodetype(parsexml("<html/>").node) === EzXMLPatched.DOCUMENT_NODE
+        @test nodetype(parsexml(b"<xml/>").node) === EzXMLPatched.DOCUMENT_NODE
+        @test nodetype(parsexml(b"<html/>").node) === EzXMLPatched.DOCUMENT_NODE
 
         # This includes multi-byte characters.
         doc = parsexml("""
@@ -173,15 +173,15 @@ end
             <DbTo>pubmed</DbTo>
         </Link>
         """)
-        @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+        @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
 
         @test_throws ArgumentError parsexml("")
-        @test_throws EzXML.XMLError parsexml(" ")
-        @test_throws EzXML.XMLError parsexml("abracadabra")
-        @test_throws EzXML.XMLError parsexml("""<?xml version="1.0"?>""")
+        @test_throws EzXMLPatched.XMLError parsexml(" ")
+        @test_throws EzXMLPatched.XMLError parsexml("abracadabra")
+        @test_throws EzXMLPatched.XMLError parsexml("""<?xml version="1.0"?>""")
 
         _, messages = capture_logging_messages() do
-            @test_throws EzXML.XMLError parsexml("<gepa?>jgo<<<><<")
+            @test_throws EzXMLPatched.XMLError parsexml("<gepa?>jgo<<<><<")
         end
         @test occursin("caught 4 errors; showing the first one", messages)
     end
@@ -198,8 +198,8 @@ end
             </body>
         </html>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
         @test hasdtd(doc)
         @test nodename(dtd(doc)) == "html"
 
@@ -213,8 +213,8 @@ end
             </body>
         </html>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
         @test hasdtd(doc)
 
         doc = parsehtml(b"""
@@ -228,8 +228,8 @@ end
             </body>
         </html>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
 
         doc = parsehtml("""
         <!DOCTYPE html>
@@ -238,11 +238,11 @@ end
             <body>こんにちは、世界！</body>
         </html>
         """)
-        @test isa(doc, EzXML.Document)
-        @test nodetype(doc.node) === EzXML.HTML_DOCUMENT_NODE
+        @test isa(doc, EzXMLPatched.Document)
+        @test nodetype(doc.node) === EzXMLPatched.HTML_DOCUMENT_NODE
 
-        @test nodetype(parsehtml("<html/>").node) === EzXML.HTML_DOCUMENT_NODE
-        @test nodetype(parsehtml(b"<html/>").node) === EzXML.HTML_DOCUMENT_NODE
+        @test nodetype(parsehtml("<html/>").node) === EzXMLPatched.HTML_DOCUMENT_NODE
+        @test nodetype(parsehtml(b"<html/>").node) === EzXMLPatched.HTML_DOCUMENT_NODE
 
         @test_throws ArgumentError parsehtml("")
     end
@@ -250,18 +250,18 @@ end
 
 @testset "Stream Reader" begin
     for i in 0:17
-        t = convert(EzXML.ReaderType, i)
+        t = convert(EzXMLPatched.ReaderType, i)
         @test t == i
         @test occursin(r"READER_[A-Z_]+$", repr(t))
         @test string(t) == string(i)
-        @test convert(EzXML.ReaderType, t) === t
+        @test convert(EzXMLPatched.ReaderType, t) === t
     end
-    @test_throws AssertionError repr(convert(EzXML.ReaderType, -1))
-    @test_throws AssertionError repr(convert(EzXML.ReaderType, 18))
+    @test_throws AssertionError repr(convert(EzXMLPatched.ReaderType, -1))
+    @test_throws AssertionError repr(convert(EzXMLPatched.ReaderType, 18))
 
     sample2 = joinpath(dirname(@__FILE__), "sample2.xml")
-    reader = open(EzXML.StreamReader, sample2)
-    @test isa(reader, EzXML.StreamReader)
+    reader = open(EzXMLPatched.StreamReader, sample2)
+    @test isa(reader, EzXMLPatched.StreamReader)
     typs = []
     names = []
     depths = []
@@ -271,14 +271,14 @@ end
         push!(typs, typ)
         push!(names, nodename(reader))
         push!(depths, nodedepth(reader))
-        if typ == EzXML.READER_ELEMENT && nodename(reader) == "elm"
+        if typ == EzXMLPatched.READER_ELEMENT && nodename(reader) == "elm"
             push!(contents, nodecontent(reader))
             push!(attributes, reader["attr1"])
         end
-        @test isa(expandtree(reader), EzXML.Node)
+        @test isa(expandtree(reader), EzXMLPatched.Node)
     end
-    @test typs[1] === EzXML.READER_ELEMENT
-    @test typs[2] === EzXML.READER_SIGNIFICANT_WHITESPACE
+    @test typs[1] === EzXMLPatched.READER_ELEMENT
+    @test typs[2] === EzXMLPatched.READER_SIGNIFICANT_WHITESPACE
     @test names[1] == "root"
     @test names[3] == "elm"
     @test depths[1] === 0
@@ -288,53 +288,53 @@ end
     @test contents[2] == "some content 2"
     @test attributes[1] == "attr1 value 1"
     @test attributes[2] == "attr1 value 2"
-    @test open(collect, EzXML.StreamReader, sample2) == typs
+    @test open(collect, EzXMLPatched.StreamReader, sample2) == typs
 
     simple_graphml = joinpath(dirname(@__FILE__), "simple.graphml")
-    reader = open(EzXML.StreamReader, simple_graphml)
-    @test isa(reader, EzXML.StreamReader)
+    reader = open(EzXMLPatched.StreamReader, simple_graphml)
+    @test isa(reader, EzXMLPatched.StreamReader)
     typs = []
     names = []
     namespaces = []
     for typ in reader
         push!(typs, typ)
         push!(names, nodename(reader))
-        if typ == EzXML.READER_ELEMENT
+        if typ == EzXMLPatched.READER_ELEMENT
             push!(namespaces, namespace(reader))
         end
-        @test isa(expandtree(reader), EzXML.Node)
+        @test isa(expandtree(reader), EzXMLPatched.Node)
     end
-    @test first(typs) === EzXML.READER_COMMENT
+    @test first(typs) === EzXMLPatched.READER_COMMENT
     @test first(names) == "#comment"
-    @test last(typs) === EzXML.READER_END_ELEMENT
+    @test last(typs) === EzXMLPatched.READER_END_ELEMENT
     @test last(names) == "graphml"
     @test first(namespaces) == "http://graphml.graphdrawing.org/xmlns"
     @test close(reader) === nothing
 
-    reader = open(EzXML.StreamReader, simple_graphml)
+    reader = open(EzXMLPatched.StreamReader, simple_graphml)
     typs = []
     names = []
     for typ in reader
         push!(typs, typ)
         push!(names, nodename(reader))
     end
-    @test first(typs) === EzXML.READER_COMMENT
+    @test first(typs) === EzXMLPatched.READER_COMMENT
     @test first(names) == "#comment"
-    @test last(typs) === EzXML.READER_END_ELEMENT
+    @test last(typs) === EzXMLPatched.READER_END_ELEMENT
     @test last(names) == "graphml"
     @test close(reader) === nothing
 
     input = open(simple_graphml)
-    reader = EzXML.StreamReader(input)
+    reader = EzXMLPatched.StreamReader(input)
     typs = []
     names = []
     for typ in reader
         push!(typs, typ)
         push!(names, nodename(reader))
     end
-    @test first(typs) === EzXML.READER_COMMENT
+    @test first(typs) === EzXMLPatched.READER_COMMENT
     @test first(names) == "#comment"
-    @test last(typs) === EzXML.READER_END_ELEMENT
+    @test last(typs) === EzXMLPatched.READER_END_ELEMENT
     @test last(names) == "graphml"
     @test isopen(input)
     @test close(reader) === nothing
@@ -343,9 +343,9 @@ end
     input = IOBuffer("""
     <root foo="FOO"/>
     """)
-    reader = EzXML.StreamReader(input)
+    reader = EzXMLPatched.StreamReader(input)
     for typ in reader
-        if typ == EzXML.READER_ELEMENT
+        if typ == EzXMLPatched.READER_ELEMENT
             @test haskey(reader, "foo")
             @test !haskey(reader, "bar")
             @test reader["foo"] == "FOO"
@@ -360,18 +360,18 @@ end
     </html>
     """)
     names = String[]
-    reader = EzXML.StreamReader(input)
+    reader = EzXMLPatched.StreamReader(input)
     for typ in reader
         @test reader.:type === typ
         push!(names, reader.name)
-        if reader.name == "head" && reader.:type == EzXML.READER_ELEMENT
+        if reader.name == "head" && reader.:type == EzXMLPatched.READER_ELEMENT
             @test reader.depth == 1
             @test reader.namespace == "http://www.w3.org/1999/xhtml"
-        elseif reader.name == "title" && reader.:type == EzXML.READER_ELEMENT
+        elseif reader.name == "title" && reader.:type == EzXMLPatched.READER_ELEMENT
             @test reader.depth == 2
             @test reader.content == "Hey"
             @test reader.namespace == "http://www.w3.org/1999/xhtml"
-        elseif reader.:type == EzXML.READER_END_ELEMENT
+        elseif reader.:type == EzXMLPatched.READER_END_ELEMENT
             @test !hasnodecontent(reader)
             @test reader.content === nothing
         end
@@ -379,28 +379,28 @@ end
     @test "head" ∈ names
     @test "title" ∈ names
 
-    @test_throws EzXML.XMLError iterate(EzXML.StreamReader(IOBuffer("not xml")))
+    @test_throws EzXMLPatched.XMLError iterate(EzXMLPatched.StreamReader(IOBuffer("not xml")))
 
     # memory management test
     for _ in 1:10
-        reader = EzXML.StreamReader(IOBuffer("<a><b/></a>"))
+        reader = EzXMLPatched.StreamReader(IOBuffer("<a><b/></a>"))
         for typ in reader
-            if typ == EzXML.READER_ELEMENT && EzXML.nodename(reader) == "a"
-                a = EzXML.expandtree(reader)
-                b = EzXML.firstelement(a)
+            if typ == EzXMLPatched.READER_ELEMENT && EzXMLPatched.nodename(reader) == "a"
+                a = EzXMLPatched.expandtree(reader)
+                b = EzXMLPatched.firstelement(a)
             end
         end
         close(reader)
     end
     @test true
 
-    reader = EzXML.StreamReader(IOBuffer("""
+    reader = EzXMLPatched.StreamReader(IOBuffer("""
     <a attr1="" attr2="This is cool">
         <b/>
     </a>
     """))
     for typ in reader
-        if typ == EzXML.READER_ELEMENT
+        if typ == EzXMLPatched.READER_ELEMENT
             if nodename(reader) == "a"
                 @test !hasnodevalue(reader)
                 @test_throws ArgumentError nodevalue(reader)
@@ -427,7 +427,7 @@ end
                 @test nodeattributes(reader) == Dict{String,String}()
                 @test countattributes(reader) == 0
             end
-        elseif typ == EzXML.READER_END_ELEMENT
+        elseif typ == EzXMLPatched.READER_END_ELEMENT
             @test_throws ArgumentError eachattribute(reader)
         end
     end
@@ -436,20 +436,20 @@ end
     # memory management test (XPath)
     # FIXME: support XPath
     #for _ in 1:10
-    #    reader = EzXML.StreamReader(IOBuffer("<a><b/></a>"))
+    #    reader = EzXMLPatched.StreamReader(IOBuffer("<a><b/></a>"))
     #    for typ in reader
-    #        if typ == EzXML.READER_ELEMENT && EzXML.nodename(reader) == "a"
-    #            a = EzXML.expandtree(reader)
+    #        if typ == EzXMLPatched.READER_ELEMENT && EzXMLPatched.nodename(reader) == "a"
+    #            a = EzXMLPatched.expandtree(reader)
     #            b = findall("//b[1]", a)
     #        end
     #    end
     #    close(reader)
     #end
     #@test true
-    reader = EzXML.StreamReader(IOBuffer("<a><b/></a>"))
+    reader = EzXMLPatched.StreamReader(IOBuffer("<a><b/></a>"))
     for typ in reader
-        if typ == EzXML.READER_ELEMENT && EzXML.nodename(reader) == "a"
-            a = EzXML.expandtree(reader)
+        if typ == EzXMLPatched.READER_ELEMENT && EzXMLPatched.nodename(reader) == "a"
+            a = EzXMLPatched.expandtree(reader)
             @test_throws ArgumentError findall("//b[1]", a, String[])
         end
     end
@@ -458,111 +458,111 @@ end
 
     # TODO: Activate this test.
     #@assert !isfile("not-exist.xml")
-    #@test_throws EzXML.XMLError open(EzXML.StreamReader, "not-exist.xml")
+    #@test_throws EzXMLPatched.XMLError open(EzXMLPatched.StreamReader, "not-exist.xml")
 end
 
 @testset "Constructors" begin
     n = XMLDocumentNode("1.0")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.DOCUMENT_NODE
-    @test document(n) === EzXML.Document(n.ptr)
+    @test nodetype(n) === EzXMLPatched.DOCUMENT_NODE
+    @test document(n) === EzXMLPatched.Document(n.ptr)
 
     n = HTMLDocumentNode(nothing, nothing)
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.HTML_DOCUMENT_NODE
-    @test document(n) === EzXML.Document(n.ptr)
+    @test nodetype(n) === EzXMLPatched.HTML_DOCUMENT_NODE
+    @test document(n) === EzXMLPatched.Document(n.ptr)
 
     n = HTMLDocumentNode("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd",
                          "-//W3C//DTD XHTML 1.0 Strict//EN")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.HTML_DOCUMENT_NODE
-    @test document(n) === EzXML.Document(n.ptr)
+    @test nodetype(n) === EzXMLPatched.HTML_DOCUMENT_NODE
+    @test document(n) === EzXMLPatched.Document(n.ptr)
 
     n = ElementNode("node")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.ELEMENT_NODE
+    @test nodetype(n) === EzXMLPatched.ELEMENT_NODE
     @test iselement(n)
     @test_throws ArgumentError document(n)
 
     n = TextNode("some text")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.TEXT_NODE
+    @test nodetype(n) === EzXMLPatched.TEXT_NODE
     @test istext(n)
     @test_throws ArgumentError document(n)
 
     n = CommentNode("some comment")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.COMMENT_NODE
+    @test nodetype(n) === EzXMLPatched.COMMENT_NODE
     @test iscomment(n)
     @test_throws ArgumentError document(n)
 
     n = CDataNode("some CDATA")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) === EzXML.CDATA_SECTION_NODE
+    @test nodetype(n) === EzXMLPatched.CDATA_SECTION_NODE
     @test iscdata(n)
     @test_throws ArgumentError document(n)
 
     n = AttributeNode("attr", "value")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test n.owner == n
-    @test nodetype(n) == EzXML.ATTRIBUTE_NODE
+    @test nodetype(n) == EzXMLPatched.ATTRIBUTE_NODE
     @test isattribute(n)
     @test_throws ArgumentError document(n)
 
     n = DTDNode("open-hatch")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test isdtd(n)
     @test n.owner === n
-    @test nodetype(n) === EzXML.DTD_NODE
+    @test nodetype(n) === EzXMLPatched.DTD_NODE
     @test nodename(n) == "open-hatch"
     @test_throws ArgumentError systemID(n)
     @test_throws ArgumentError externalID(n)
 
     n = DTDNode("open-hatch",
                 "http://www.textuality.com/boilerplate/OpenHatch.xml")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test isdtd(n)
     @test n.owner === n
-    @test nodetype(n) === EzXML.DTD_NODE
+    @test nodetype(n) === EzXMLPatched.DTD_NODE
     @test systemID(n) == "http://www.textuality.com/boilerplate/OpenHatch.xml"
     @test_throws ArgumentError externalID(n)
 
     n = DTDNode("open-hatch",
                 "http://www.textuality.com/boilerplate/OpenHatch.xml",
                 "-//Textuality//TEXT Standard open-hatch boilerplate//EN")
-    @test isa(n, EzXML.Node)
+    @test isa(n, EzXMLPatched.Node)
     @test isdtd(n)
     @test n.owner === n
-    @test nodetype(n) === EzXML.DTD_NODE
+    @test nodetype(n) === EzXMLPatched.DTD_NODE
     @test systemID(n) == "http://www.textuality.com/boilerplate/OpenHatch.xml"
     @test externalID(n) == "-//Textuality//TEXT Standard open-hatch boilerplate//EN"
 
     doc = XMLDocument()
-    @test isa(doc, EzXML.Document)
+    @test isa(doc, EzXMLPatched.Document)
     @test doc.node.owner === doc.node
-    @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+    @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
     @test !hasroot(doc)
     @test_throws ArgumentError root(doc)
 
     doc = HTMLDocument()
-    @test isa(doc, EzXML.Document)
+    @test isa(doc, EzXMLPatched.Document)
     @test doc.node.owner === doc.node
-    @test nodetype(doc.node) == EzXML.HTML_DOCUMENT_NODE
+    @test nodetype(doc.node) == EzXMLPatched.HTML_DOCUMENT_NODE
     @test !hasroot(doc)
     @test_throws ArgumentError root(doc)
 
     doc = HTMLDocument("http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd",
                        "-//W3C//DTD XHTML 1.0 Strict//EN")
-    @test isa(doc, EzXML.Document)
+    @test isa(doc, EzXMLPatched.Document)
     @test doc.node.owner === doc.node
-    @test nodetype(doc.node) == EzXML.HTML_DOCUMENT_NODE
+    @test nodetype(doc.node) == EzXMLPatched.HTML_DOCUMENT_NODE
     @test !hasroot(doc)
     @test_throws ArgumentError root(doc)
 end
@@ -571,11 +571,11 @@ end
     doc = parsexml("<root/>")
     @test hasroot(doc)
     @test !hasdtd(doc)
-    @test isa(root(doc), EzXML.Node)
+    @test isa(root(doc), EzXMLPatched.Node)
     @test root(doc) == root(doc)
     @test root(doc) === root(doc)
     @test hash(root(doc)) === hash(root(doc))
-    @test nodetype(root(doc)) === EzXML.ELEMENT_NODE
+    @test nodetype(root(doc)) === EzXMLPatched.ELEMENT_NODE
     @test nodepath(root(doc)) == "/root"
     @test nodename(root(doc)) == "root"
     @test nodecontent(root(doc)) == ""
@@ -599,7 +599,7 @@ end
     """)
     @test hasroot(doc)
     @test hasdtd(doc)
-    @test isa(dtd(doc), EzXML.Node)
+    @test isa(dtd(doc), EzXMLPatched.Node)
     @test isdtd(dtd(doc))
     @test dtd(doc) === dtd(doc)
     @test nodename(dtd(doc)) == "html"
@@ -618,17 +618,17 @@ end
     </r>
     """)
     r = root(doc)
-    @test nodetype(firstnode(r)) === EzXML.TEXT_NODE
-    @test nodetype(lastnode(r)) === EzXML.TEXT_NODE
-    @test nodetype(firstelement(r)) === EzXML.ELEMENT_NODE
+    @test nodetype(firstnode(r)) === EzXMLPatched.TEXT_NODE
+    @test nodetype(lastnode(r)) === EzXMLPatched.TEXT_NODE
+    @test nodetype(firstelement(r)) === EzXMLPatched.ELEMENT_NODE
     @test nodename(firstelement(r)) == "c1"
-    @test nodetype(lastelement(r)) === EzXML.ELEMENT_NODE
+    @test nodetype(lastelement(r)) === EzXMLPatched.ELEMENT_NODE
     @test nodename(lastelement(r)) == "c3"
     c1 = firstelement(r)
     @test hasnextnode(c1)
     @test hasprevnode(c1)
-    @test nodetype(nextnode(c1)) === EzXML.TEXT_NODE
-    @test nodetype(prevnode(c1)) === EzXML.TEXT_NODE
+    @test nodetype(nextnode(c1)) === EzXMLPatched.TEXT_NODE
+    @test nodetype(prevnode(c1)) === EzXMLPatched.TEXT_NODE
     @test hasnextelement(c1)
     @test !hasprevelement(c1)
     c2 = nextelement(c1)
@@ -803,16 +803,16 @@ end
 
     @testset "Iterators" begin
         doc = parsexml("<root/>")
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachnode(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 0
         @test nodes(root(doc)) == ns
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachelement(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 0
@@ -821,16 +821,16 @@ end
         doc = parsexml("""
         <root><c1></c1><c2></c2></root>
         """)
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachnode(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 2
         @test nodes(root(doc)) == ns
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachelement(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 2
@@ -842,16 +842,16 @@ end
             <c2></c2>
         </root>
         """)
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachnode(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 5
         @test nodes(root(doc)) == ns
-        ns = EzXML.Node[]
+        ns = EzXMLPatched.Node[]
         for (i, node) in enumerate(eachelement(root(doc)))
-            @test isa(node, EzXML.Node)
+            @test isa(node, EzXMLPatched.Node)
             push!(ns, node)
         end
         @test length(ns) == 2
@@ -893,14 +893,14 @@ end
     @test doc.encoding == "UTF-8"
 
     doc = parsexml("<root/>")
-    @test doc.node isa EzXML.Node
-    @test doc.node.type === EzXML.DOCUMENT_NODE
+    @test doc.node isa EzXMLPatched.Node
+    @test doc.node.type === EzXMLPatched.DOCUMENT_NODE
     @test doc.node.name === nothing
     @test doc.node.path == "/"
     @test doc.node.content == ""
     @test doc.node.namespace === nothing
-    @test doc.root isa EzXML.Node
-    @test doc.root.type === EzXML.ELEMENT_NODE
+    @test doc.root isa EzXMLPatched.Node
+    @test doc.root.type === EzXMLPatched.ELEMENT_NODE
     @test doc.root.name == "root"
     @test doc.root.path == "/root"
     @test doc.root.content == ""
@@ -910,7 +910,7 @@ end
     doc = parsexml("""<root attr="100">some content</root>""")
     @test doc.root.content == "some content"
     attr = attributes(doc.root)[1]
-    @test attr.type === EzXML.ATTRIBUTE_NODE
+    @test attr.type === EzXMLPatched.ATTRIBUTE_NODE
     @test attr.name == "attr"
     @test attr.path == "/root/@attr"
     @test attr.content == "100"
@@ -938,8 +938,8 @@ end
     @test doc.root.document === doc
     @test doc.root.parentnode === doc.node
     @test doc.root.parentelement === nothing
-    @test doc.root.firstnode.type === EzXML.TEXT_NODE
-    @test doc.root.lastnode.type === EzXML.TEXT_NODE
+    @test doc.root.firstnode.type === EzXMLPatched.TEXT_NODE
+    @test doc.root.lastnode.type === EzXMLPatched.TEXT_NODE
     @test doc.root.firstelement.name == "c1"
     @test doc.root.lastelement.name  == "c3"
     @test doc.root.firstnode.nextnode === doc.root.firstelement
@@ -964,8 +964,8 @@ end
 
 @testset "Construction" begin
     doc = XMLDocument()
-    @test isa(doc, EzXML.Document)
-    @test nodetype(doc.node) === EzXML.DOCUMENT_NODE
+    @test isa(doc, EzXMLPatched.Document)
+    @test nodetype(doc.node) === EzXMLPatched.DOCUMENT_NODE
     @test !hasroot(doc)
     @test_throws ArgumentError root(doc)
     r1 = ElementNode("r1")
@@ -1259,7 +1259,7 @@ end
     @test findfirst("//bar", doc) === findall("//bar", doc)[1]
     @test findlast("//bar", doc) === findall("//bar", doc)[3]
     @test length(findall("/baz", doc)) == 0
-    @test_throws EzXML.XMLError findall("//bar!", doc)
+    @test_throws EzXMLPatched.XMLError findall("//bar!", doc)
     @test findall("foo", root(doc)) == findall("//foo", doc)
     @test findfirst("foo", root(doc)) === findfirst("//foo", doc)
     @test findlast("foo", root(doc)) === findlast("//foo", doc)
@@ -1346,7 +1346,7 @@ end
 end
 
 # Check no uncaught errors.
-@test isempty(EzXML.XML_GLOBAL_ERROR_STACK)
+@test isempty(EzXMLPatched.XML_GLOBAL_ERROR_STACK)
 
 if Sys.isunix()
     julia = joinpath(Sys.BINDIR, "julia")

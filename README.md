@@ -1,15 +1,14 @@
-<p align="center"><img src="/docs/EzXML.jl.png" alt="EzXML.jl Logo" width="350" /></p>
+<p align="center"><img src="/docs/EzXMLPatched.jl.png" alt="EzXMLPatched.jl Logo" width="350" /></p>
 
-EzXML.jl - XML/HTML tools for primates
+EzXMLPatched.jl - XML/HTML tools for primates
 ======================================
 
 [![Docs Stable][docs-stable-img]][docs-stable-url]
 [![Docs Latest][docs-latest-img]][docs-latest-url]
-[![TravisCI Status][travisci-img]][travisci-url]
-[![Appveyor Status][appveyor-img]][appveyor-url]
+![Build Status (Github Actions)](https://github.com/aminya/EzXMLPatched.jl/workflows/CI/badge.svg)
 [![codecov.io][codecov-img]][codecov-url]
 
-EzXML.jl is a package to handle XML/HTML documents for primates.
+EzXMLPatched.jl is a package to handle XML/HTML documents for primates.
 
 The main features are:
 * Reading and writing XML/HTML documents.
@@ -24,9 +23,9 @@ The main features are:
 Installation
 ------------
 
-Install EzXML.jl as follows:
+Install EzXMLPatched.jl as follows:
 ```
-julia -e 'using Pkg; Pkg.add("EzXML")'
+julia -e 'using Pkg; Pkg.add("EzXMLPatched")'
 ```
 
 This package depends on [libxml2](http://xmlsoft.org/) 2.9.9, which will be automatically installed as an artifact via [XML2_jll.jl](https://github.com/JuliaBinaryWrappers/XML2_jll.jl) if you use Julia 1.3 or later.
@@ -35,7 +34,7 @@ Currently, Windows, Linux, macOS, and FreeBSD are now supported.
 Version compatibility
 ---------------------
 
-| EzXML.jl | Julia        |
+| EzXMLPatched.jl | Julia        |
 |:--------:|:------------:|
 | 1.0      | 1.0 or later |
 | 1.1      | 1.3 or later |
@@ -45,7 +44,7 @@ Usage
 
 ```julia
 # Load the package.
-using EzXML
+using EzXMLPatched
 
 # Parse an XML string
 # (use `readxml(<filename>)` to read a document from a file).
@@ -86,13 +85,13 @@ end
 Quick reference
 ---------------
 
-See the [reference page](https://bicycle1885.github.io/EzXML.jl/stable/reference/) or docstrings for more details.
+See the [reference page](https://bicycle1885.github.io/EzXMLPatched.jl/stable/reference/) or docstrings for more details.
 
 Types:
-* `EzXML.Document`: an XML/HTML document
-* `EzXML.Node`: an XML/HTML node including elements, attributes, texts, etc.
-* `EzXML.XMLError`: an error happened in libxml2
-* `EzXML.StreamReader`: a streaming XML reader
+* `EzXMLPatched.Document`: an XML/HTML document
+* `EzXMLPatched.Node`: an XML/HTML node including elements, attributes, texts, etc.
+* `EzXMLPatched.XMLError`: an error happened in libxml2
+* `EzXMLPatched.StreamReader`: a streaming XML reader
 
 IO:
 * From file: `readxml(filename|stream)`, `readhtml(filename|stream)`
@@ -130,8 +129,8 @@ Accessors:
 * Namespaces: `namespace(node)`, `namespaces(node)`
 
 Constructors:
-* `EzXML.Document` type: `XMLDocument(version="1.0")`, `HTMLDocument(uri=nothing, externalID=nothing)`
-* `EzXML.Node` type: `XMLDocumentNode(version="1.0")`, `HTMLDocumentNode(uri, externalID)`, `ElementNode(name)`, `TextNode(content)`, `CommentNode(content)`, `CDataNode(content)`, `AttributeNode(name, value)`, `DTDNode(name, [systemID, [externalID]])`
+* `EzXMLPatched.Document` type: `XMLDocument(version="1.0")`, `HTMLDocument(uri=nothing, externalID=nothing)`
+* `EzXMLPatched.Node` type: `XMLDocumentNode(version="1.0")`, `HTMLDocumentNode(uri, externalID)`, `ElementNode(name)`, `TextNode(content)`, `CommentNode(content)`, `CDataNode(content)`, `AttributeNode(name, value)`, `DTDNode(name, [systemID, [externalID]])`
 
 Queries:
 * XPath: `findall(xpath, doc|node)`, `findfirst(xpath, doc|node)`, `findlast(xpath, doc|node)`
@@ -150,12 +149,12 @@ Other XML/HTML packages in Julia
 * [LibExpat.jl](https://github.com/amitmurthy/LibExpat.jl)
 
 [docs-stable-img]: https://img.shields.io/badge/docs-stable-blue.svg
-[docs-stable-url]: https://bicycle1885.github.io/EzXML.jl/stable
+[docs-stable-url]: https://bicycle1885.github.io/EzXMLPatched.jl/stable
 [docs-latest-img]: https://img.shields.io/badge/docs-latest-blue.svg
-[docs-latest-url]: https://bicycle1885.github.io/EzXML.jl/latest
-[travisci-img]: https://travis-ci.org/bicycle1885/EzXML.jl.svg?branch=master
-[travisci-url]: https://travis-ci.org/bicycle1885/EzXML.jl
+[docs-latest-url]: https://bicycle1885.github.io/EzXMLPatched.jl/latest
+[travisci-img]: https://travis-ci.org/bicycle1885/EzXMLPatched.jl.svg?branch=master
+[travisci-url]: https://travis-ci.org/bicycle1885/EzXMLPatched.jl
 [appveyor-img]: https://ci.appveyor.com/api/projects/status/n5d7o2mmy8ckdjc8?svg=true
 [appveyor-url]: https://ci.appveyor.com/project/bicycle1885/ezxml-jl
-[codecov-img]: http://codecov.io/github/bicycle1885/EzXML.jl/coverage.svg?branch=master
-[codecov-url]: http://codecov.io/github/bicycle1885/EzXML.jl?branch=master
+[codecov-img]: http://codecov.io/github/bicycle1885/EzXMLPatched.jl/coverage.svg?branch=master
+[codecov-url]: http://codecov.io/github/bicycle1885/EzXMLPatched.jl?branch=master

@@ -1,4 +1,4 @@
-module EzXML
+module EzXMLPatched
 
 export
     # Types
