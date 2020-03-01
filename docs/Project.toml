@@ -1,6 +1,6 @@
 [deps]
 Documenter = "e30172f5-a6a5-5a46-863b-614d45cd2de4"
-EzXMLPatched = "8f5d6c58-4d21-5cfd-889c-e3ad7ee6a615"
+EzXMLPatched = "ebbc4602-91c8-4f2e-9b89-acc792d9cec0"
 
 [compat]
 Documenter = "~0.24"
