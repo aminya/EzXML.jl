@@ -52,7 +52,7 @@ function HTMLDocument(uri=nothing, externalID=nothing)
 end
 
 function Base.show(io::IO, doc::Document)
-    prefix = "EzXML.Document"
+    prefix = "EzXMLPatched.Document"
     node = repr(doc.node)
     print(io, "$(prefix)($node)")
 end

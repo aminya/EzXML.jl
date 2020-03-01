@@ -49,7 +49,7 @@ constructor:
 julia> using EzXMLPatched
 
 julia> doc = XMLDocument()
-EzXML.Document(Node(<DOCUMENT_NODE>))
+EzXMLPatched.Document(Node(<DOCUMENT_NODE>))
 
 julia> typeof(doc)
 EzXMLPatched.Document
@@ -218,12 +218,12 @@ Likewise, `parsexml(<string or byte array>)` parses an XML string or a byte
 array in memory and builds a document object:
 ```jldoctest dom
 julia> doc = readxml("primates.xml")
-EzXML.Document(Node(<DOCUMENT_NODE>))
+EzXMLPatched.Document(Node(<DOCUMENT_NODE>))
 
 julia> data = String(read("primates.xml"));
 
 julia> doc = parsexml(data)
-EzXML.Document(Node(<DOCUMENT_NODE>))
+EzXMLPatched.Document(Node(<DOCUMENT_NODE>))
 
 ```
 
@@ -234,7 +234,7 @@ julia> primates = doc.root  # get the root element
 Node(<ELEMENT_NODE[primates]>)
 
 julia> genus = elements(primates)  # `elements` returns all child elements.
-2-element Array{EzXML.Node,1}:
+2-element Array{EzXMLPatched.Node,1}:
  Node(<ELEMENT_NODE[genus]>)
  Node(<ELEMENT_NODE[genus]>)
 
@@ -363,7 +363,7 @@ node = Node(<ELEMENT_NODE[genus]>)
 node = Node(<ELEMENT_NODE[genus]>)
 
 julia> nodes(primates)
-5-element Array{EzXML.Node,1}:
+5-element Array{EzXMLPatched.Node,1}:
  Node(<TEXT_NODE>)
  Node(<ELEMENT_NODE[genus]>)
  Node(<TEXT_NODE>)
@@ -371,7 +371,7 @@ julia> nodes(primates)
  Node(<TEXT_NODE>)
 
 julia> elements(primates)
-2-element Array{EzXML.Node,1}:
+2-element Array{EzXMLPatched.Node,1}:
  Node(<ELEMENT_NODE[genus]>)
  Node(<ELEMENT_NODE[genus]>)
 
@@ -388,14 +388,14 @@ The `findall`, `findfirst` and `findlast` functions are overloaded for XPath
 query and return a vector of selected nodes:
 ```jldoctest xpath
 julia> primates = readxml("primates.xml")
-EzXML.Document(Node(<DOCUMENT_NODE>))
+EzXMLPatched.Document(Node(<DOCUMENT_NODE>))
 
 julia> findall("/primates", primates)  # Find the "primates" element just under the document
-1-element Array{EzXML.Node,1}:
+1-element Array{EzXMLPatched.Node,1}:
  Node(<ELEMENT_NODE[primates]>)
 
 julia> findall("//genus", primates)
-2-element Array{EzXML.Node,1}:
+2-element Array{EzXMLPatched.Node,1}:
  Node(<ELEMENT_NODE[genus]>)
  Node(<ELEMENT_NODE[genus]>)
 
@@ -445,7 +445,7 @@ julia> doc = parsexml("""
            <child/>
        </parent>
        """)
-EzXML.Document(Node(<DOCUMENT_NODE>))
+EzXMLPatched.Document(Node(<DOCUMENT_NODE>))
 
 julia> findall("/parent/child", doc.root)  # nothing will be found
 0-element Array{EzXMLPatched.Node,1}
@@ -458,7 +458,7 @@ julia> ns = namespace(doc.root)  # get the namespace
 "http://www.foobar.org"
 
 julia> findall("/x:parent/x:child", doc.root, ["x"=>ns])  # specify its prefix as "x"
-1-element Array{EzXML.Node,1}:
+1-element Array{EzXMLPatched.Node,1}:
  Node(<ELEMENT_NODE[child]>)
 
 ```
@@ -494,7 +494,7 @@ The API of a streaming reader is quite different from the DOM API.  The first
 thing you needs to do is to create an `EzXMLPatched.StreamReader` object using the
 `open` function:
 ```jldoctest stream
-julia> reader = open(EzXML.StreamReader, "undirected.graphml")
+julia> reader = open(EzXMLPatched.StreamReader, "undirected.graphml")
 StreamReader(<READER_NONE>)
 
 ```
@@ -547,7 +547,7 @@ While reading data, a stream reader provides the following properties:
 available from the file. When you finished reading data, you need to call
 `close(reader)` to release allocated resources:
 ```jldoctest
-julia> reader = open(EzXML.StreamReader, "undirected.graphml")
+julia> reader = open(EzXMLPatched.StreamReader, "undirected.graphml")
 StreamReader(<READER_NONE>)
 
 julia> while (item = iterate(reader)) != nothing
@@ -598,7 +598,7 @@ EzXMLPatched.jl overloads the `Base.iterate` function to make a streaming reader
 iterable via the `for` loop. Therefore, you can iterate over all components
 without explicitly calling `iterate` as follows:
 ```jldoctest
-julia> reader = open(EzXML.StreamReader, "undirected.graphml")
+julia> reader = open(EzXMLPatched.StreamReader, "undirected.graphml")
 StreamReader(<READER_NONE>)
 
 julia> for typ in reader
